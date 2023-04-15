@@ -13,13 +13,7 @@ std::ostream& utec::operator<<(std::ostream& out, matrix& mtx) {
     }
     return out;
 }
-/*namespace std {
-    void swap(utec::matrix &_m1, utec::matrix &_m2);
-}
 
-void std::swap(utec::matrix& _m1, utec::matrix& _m2){
-    _m1._swap(_m2);
-}*/
 
 
 

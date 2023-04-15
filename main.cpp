@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <random>
 #include "matrix.h"
@@ -30,13 +31,13 @@ int main() {
     cout << m2.rows() << " " << m2.cols() << endl;
     cout << m1 << endl << m2 << endl;
 
-    // Move
+     // Move
 
-    /*std::swap(m1, m2);
+    std::swap(m1, m2);
     m2(0, 0) = 100;
     cout << m1.rows() << " " << m1.cols() << endl;
     cout << m2.rows() << " " << m2.cols() << endl;
     cout << m1 << endl << m2 << endl << m3 <<endl;
-    */
+
     return 0;
 }
