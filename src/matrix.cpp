@@ -4,7 +4,7 @@
 
 #include "matrix.h"
 
-std::ostream& utec::operator<<(std::ostream& out, matrix& mtx) {
+std::ostream& utec::operator<<(std::ostream& out, matrix &mtx) {
     for (int fila = 0; fila < mtx.n_row; fila++) {
         for (int col = 0; col < mtx.n_col; col++) {
             out << mtx.matriz[fila][col] << " ";
@@ -12,6 +12,26 @@ std::ostream& utec::operator<<(std::ostream& out, matrix& mtx) {
         out << '\n';
     }
     return out;
+}
+
+std::ostream& utec::operator<<(std::ostream& out, matrix &&mtx) {
+    for (int fila = 0; fila < mtx.n_row; fila++) {
+        for (int col = 0; col < mtx.n_col; col++) {
+            out << mtx.matriz[fila][col] << " ";
+        }
+        out << '\n';
+    }
+    return out;
+}
+
+utec::matrix utec::operator*(int m, utec::matrix &m1) {
+    matrix mr(m1.n_row, m1.n_col);
+    for (int fila = 0; fila<m1.n_row; fila++){
+        for (int col = 0; col<m1.n_col; col++){
+            mr.matriz[fila][col] = m1.matriz[fila][col]*m;
+        }
+    }
+    return mr;
 }
 
 
