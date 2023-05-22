@@ -7,20 +7,20 @@
 #include <iostream>
 #include <utility>
 #include <random>
-
+typedef std::size_t SIZE_TYPE;
 namespace utec {
 
     class matrix{
     private:
-        int n_row = 0;
-        int n_col = 0;
+        SIZE_TYPE n_row = 0;
+        SIZE_TYPE n_col = 0;
 
         int **matriz;
     public:
 
 
         matrix() = default;
-        matrix(int row, int col) : n_row(row), n_col(col) {
+        matrix(SIZE_TYPE row, SIZE_TYPE col) : n_row(row), n_col(col) {
             matriz = new int *[n_row];
             for (int i = 0; i < n_row; i++) {
                 matriz[i] = new int[n_col];
@@ -80,7 +80,7 @@ namespace utec {
             return *this;
 
         };
-        matrix& operator= (matrix&& other) noexcept {
+        matrix& operator=(matrix&& other) noexcept {
             if(this!=&other) {
 
                 for (int i = 0; i < n_row; i++) {
@@ -113,14 +113,14 @@ namespace utec {
         }
 
         //Getters
-        int rows() const { return n_row; }
-        int cols() const { return n_col; }
+        SIZE_TYPE rows() const { return n_row; }
+        SIZE_TYPE cols() const { return n_col; }
 
         //Methods
 
 
         //Operator overload
-        int &operator()(int row, int col) {
+        int &operator()(SIZE_TYPE row, SIZE_TYPE col) const {
             return matriz[row][col];
         };
 
@@ -128,7 +128,6 @@ namespace utec {
         matrix operator * (matrix& m1){
 
             if(n_col != m1.n_row) return *this;
-
             //instanciar nueva matriz
             matrix mr(n_row,m1.n_col);
 
@@ -147,7 +146,6 @@ namespace utec {
         matrix operator * (matrix&& m1){
 
             if(n_col != m1.n_row) return *this;
-
             //instanciar nueva matriz
             matrix mr(n_row,m1.n_col);
 
@@ -163,13 +161,14 @@ namespace utec {
             }
             return mr;
         }
-        matrix operator * (int m){
+        matrix operator * (int m) {
+            matrix mr(n_row, n_col);
             for(int fila = 0; fila<n_row; fila++){
-                for(int col= 0;  col<n_row; col++){
-                    matriz[fila][col] *=m;
+                for(int col= 0;  col<n_col; col++){
+                    mr(fila,col) = matriz[fila][col] * m;
                 }
             }
-            return *this;
+            return mr;
         }
         matrix& operator *=(int m){
             for (int fila = 0; fila <n_row; fila++)
@@ -182,7 +181,8 @@ namespace utec {
 
         //operador + rvalue + lvalue
         matrix operator + (matrix& m1){
-            if(n_col!=m1.n_row) return *this;
+            if((n_row != m1.n_row)||(n_col != m1.n_col)) return *this;
+            //if(n_col!=m1.n_row) return *this;
             matrix mr(n_row, n_col);
             for (int fila= 0;fila<n_row;fila++){
                 for (int col = 0; col<n_col;col++){
@@ -192,7 +192,9 @@ namespace utec {
             return mr;
         }
         matrix operator + (matrix&& m1){
-            if(n_col!=m1.n_row) return *this;
+            if((n_row != m1.n_row)||(n_col != m1.n_col)) return *this;
+            //if(n_col!=m1.n_row) return *this;
+
             matrix mr(n_row, n_col);
             for (int fila= 0;fila<n_row;fila++){
                 for (int col = 0; col<n_col;col++){
@@ -212,24 +214,47 @@ namespace utec {
             return mr;
         }
         matrix& operator +=(int m){
+
             for (int fila= 0;fila<n_row;fila++){
                 for (int col = 0; col<n_col;col++){
-                     matriz[fila][col] += m;
+                     matriz[fila][col] = matriz[fila][col]+ m;
                 }
             }
             return *this;
         }
 
+        //operador == y !=
+
+        friend bool operator == (matrix& m1, matrix& m2){
+            if((m1.n_row != m2.n_row) ||(m1.n_col != m2.n_col)) return false;
+            for (int fila = 0; fila<m1.n_row; fila++){
+                for (int col = 0; col<m1.n_col; col++){
+                    if (m1.matriz[fila][col] != m2.matriz[fila][col] ) return false;
+                }
+            }
+            return true;
+        }
+        friend bool operator != (matrix& m1, matrix& m2){
+            if((m1.n_row != m2.n_row) ||(m1.n_col != m2.n_col)) return true;
+            for (int fila = 0; fila<m1.n_row; fila++){
+                for (int col = 0; col<m1.n_col; col++){
+                    if (m1.matriz[fila][col] != m2.matriz[fila][col] ) return true;
+                }
+            }
+            return false;
+        }
 
         //friend std::ostream &operator<<(std::ostream &out, matrix &mtx);
         friend std::ostream &operator<<(std::ostream &out, matrix& mtx);
         friend std::ostream &operator<<(std::ostream &out, matrix&& mtx);
         friend matrix operator*(int m, matrix& m1);
+        friend matrix operator+(int m, matrix& m1);
 
 
 };
-   //std::ostream &operator<<(std::ostream &out, matrix &mtx);
+
     matrix operator*(int m, matrix& m1);
+    matrix operator+(int m, matrix& m1);
     std::ostream &operator<<(std::ostream &out, matrix& mtx);
     std::ostream &operator<<(std::ostream &out, matrix&& mtx);
 

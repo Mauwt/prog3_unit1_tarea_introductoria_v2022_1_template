@@ -1,7 +1,5 @@
 #include <iostream>
-#include <algorithm>
 #include <vector>
-#include <random>
 #include "matrix.h"
 
 using namespace std;
@@ -10,7 +8,7 @@ using namespace std;
 
 int main() {
 
-    int rows = 0, cols = 0;
+    SIZE_TYPE rows = 0, cols = 0;
     cout << "Filas y columnas: \n";
     cin >> rows >> cols;
     utec::matrix m1(rows, cols);
@@ -47,7 +45,6 @@ int main() {
 
     // Multiplicación entre matrices
     cout << m2 * m3 << endl;
-
     //Suma de matrices
     auto m4 = m1 + m2;
     cout << m4 << endl;
